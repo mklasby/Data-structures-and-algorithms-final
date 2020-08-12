@@ -1,0 +1,57 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-SortingAlgos<Final_Project_1fffb121>",
+            "request": "launch",
+            "mainClass": "SortingAlgos",
+            "projectName": "Final_Project_1fffb121",
+            "args": [
+                "random",
+                "10",
+                "quick",
+                "outfile.txt"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Gcd",
+            "request": "launch",
+            "mainClass": "Gcd"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MoneyChange",
+            "request": "launch",
+            "mainClass": "MoneyChange"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MoneyChange2",
+            "request": "launch",
+            "mainClass": "MoneyChange2"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-QuickSort",
+            "request": "launch",
+            "mainClass": "QuickSort"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Signatures",
+            "request": "launch",
+            "mainClass": "Signatures"
+        }
+    ]
+}
