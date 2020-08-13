@@ -1,5 +1,6 @@
 /**
- * Implementation of a linked list from primative constructs
+ * Implementation of a linked list from primative constructs. This class stores
+ * Word objects at each Ndode.
  * 
  * @author: Mike Lasby
  * @version: 1.0
@@ -13,6 +14,9 @@ public class LinkedList {
         this.head = null;
     }
 
+    /**
+     * At node to end of list
+     */
     public void append(Node n) {
         if (this.head == null) {
             this.head = n;
@@ -26,11 +30,20 @@ public class LinkedList {
         }
     }
 
+    /**
+     * Add node to start of list
+     */
     public void prepend(Node n) {
         n.setNext(this.head);
         this.setHead(n);
     }
 
+    /**
+     * Add Node n at index idx
+     * 
+     * @param n   Node to be added
+     * @param idx index at which to add node.
+     */
     public void insert(Node n, int idx) {
         if (idx == 0) {
             setHead(n);
@@ -50,10 +63,18 @@ public class LinkedList {
         cursor.setNext(n);
     }
 
+    /**
+     * Sets head of linked list to node n
+     * 
+     * @param n node to set head to
+     */
     public void setHead(Node n) {
         this.head = n;
     }
 
+    /**
+     * 
+     */
     public Node getHead() {
         return this.head;
     }
@@ -95,24 +116,21 @@ public class LinkedList {
         }
     }
 
-    // public void delete(Node del) {
-    // if (del == head) {
-    // head = head.getNext();
-    // return;
-    // } else {
-    // Node n = head;
-    // while (n.getNext() != null) {
-    // if (n.getNext() == del) {
-    // Node temp = del.getNext();
-    // n.next = temp;
-    // return;
-    // }
-    // n = n.next;
-    // }
-    // System.out.print("ERROR: No such node found.");
-    // return;
-    // }
-    // }
+    public int countAnagrams2() {
+        Node corr = getHead();
+        Node corrNext = corr.getNext();
+        int size = this.length(); // assume no anagrams
+
+        while (corrNext != null) {
+            if (corr.element.sortedChars.equals(corrNext.element.sortedChars)) {
+                size--;
+            }
+            corr = corr.getNext();
+            corrNext = corrNext.getNext();
+        }
+        return size;
+
+    }
 
     public int countAnagrams() {
         Node a = getHead();
@@ -128,11 +146,15 @@ public class LinkedList {
                 counter++; // found an anagram
                 while (c != null) {
                     if (b.element.sortedChars.equals(c.element.sortedChars)) {
+                        System.out.print(c.element.word + "\n");
                         c = c.next;
                         counter++; // found another
                     } else {
                         break;
                     }
+                }
+                if (c == null || a.next == null) {
+                    break;
                 }
                 a = c.next;
                 if (a == null) {
@@ -149,7 +171,12 @@ public class LinkedList {
     }
 
     public LinkedList[] collectAnagrams() {
-        int size = this.length() - countAnagrams();
+        System.out.print(this.length() + "\n");
+
+        // int size = this.length() - countAnagrams() - 1;
+        int size = countAnagrams2();
+        System.out.printf("\nSIZE! = %d\n", size);
+
         Node curr = getHead();
         LinkedList[] lists = new LinkedList[size];
         int lists_idx = 0;
@@ -164,7 +191,7 @@ public class LinkedList {
                 lists[lists_idx] = thisList;
                 return lists;
             }
-            while (curr.element.sortedChars.equals(currNext.element.sortedChars) && currNext != null) {
+            while (currNext != null && curr.element.sortedChars.equals(currNext.element.sortedChars)) {
                 System.out.printf("Found anagram %s\n", currNext.toString());
                 Node nextNewNode = new Node(new Word(currNext.element.word, currNext.element.idx));
                 thisList.append(nextNewNode);
@@ -173,6 +200,9 @@ public class LinkedList {
             lists[lists_idx] = thisList;
             lists_idx++;
             curr = currNext;
+            if (currNext == null || curr == null) {
+                break;
+            }
         }
         return lists;
     }
@@ -249,6 +279,17 @@ public class LinkedList {
 
     }
 
+    public String printToFile() {
+        Node head = getHead();
+        String buffer = "";
+        while (head != null) {
+            buffer += head.element.word + " ";
+            head = head.next;
+        }
+        buffer += "\n";
+        return buffer;
+    }
+
     public void print() {
         Node cursor = this.getHead();
         System.out.print("[");
@@ -259,5 +300,38 @@ public class LinkedList {
         }
         System.out.print("]\n");
 
+    }
+
+    void insertionSortHelper(Node head, Node curr, String by) {
+        if (by == "word") {
+            while (head != curr) {
+                if (head.element.word.compareTo(curr.element.word) > 0) {
+                    Word temp = head.element;
+                    head.element = curr.element;
+                    curr.element = temp;
+                }
+                head = head.next;
+            }
+        } else {
+            while (head != curr) {
+                if (head.element.sortedChars.compareTo(curr.element.sortedChars) > 0) {
+                    Word temp = head.element;
+                    head.element = curr.element;
+                    curr.element = temp;
+                }
+                head = head.next;
+            }
+        }
+    }
+
+    public Node insertionSortList(Node head, String by) {
+        if (head == null || head.next == null)
+            return head;
+        Node curr = head.next;
+        while (curr != null) {
+            insertionSortHelper(head, curr, by);
+            curr = curr.next;
+        }
+        return head;
     }
 }

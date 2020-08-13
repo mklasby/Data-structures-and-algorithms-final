@@ -46,25 +46,32 @@ public class AnagramMain {
         } catch (IOException e) {
             System.out.print("ERROR: No such input file found!\n");
             System.out.print(ioError);
+            System.exit(0);
         }
-
-        // am.words.print();
-        // // am.words.insertionSort("word");
-        // am.words.insertionSortLL("word");
+        long preTime = System.currentTimeMillis();
+        // am.words.setHead(n);.words.insertionSortLL("sortedChars");
+        am.words.setHead(am.words.insertionSortList(am.words.getHead(), "sortedChar"));
         am.words.print();
-        am.words.setHead(am.words.insertionSortLL("sortedChars"));
-        am.words.print();
-        int count = am.words.countAnagrams();
-        System.out.print(count + "\n");
-        // am.words.print();
-
         am.lists = am.words.collectAnagrams();
-        for (int i = 0; i < am.lists.length; i++) {
+
+        for (int i = 0; i < am.lists.length - 1; i++) {
             am.lists[i].print();
         }
-        for (int i = 0; i < am.lists.length; i++) {
+        for (int i = 0; i < am.lists.length - 1; i++) {
             am.lists[i].setHead(am.lists[i].insertionSortLL("word"));
-            am.lists[i].print();
+        }
+
+        am.quickSort(am.lists, 0, am.lists.length - 1);
+        long postTime = System.currentTimeMillis();
+
+        try {
+            am.writeOutFile(am.lists, outFile, postTime - preTime);
+
+        } catch (IOException e) {
+            System.out.print(
+                    "ERROR: Output file invalid, please ensure that the output file name is only alpha numeric characters.");
+            System.out.print(ioError);
+            System.exit(0);
         }
 
     }
@@ -76,11 +83,29 @@ public class AnagramMain {
         String text;
         int idx = 0;
         while ((text = br.readLine()) != null) {
+            if (text.equals(" ") || text.equals("\n") || text.equals("\t")) {
+                continue;
+            }
             Node node = new Node(new Word(text, idx));
             words.append(node);
             idx += 1;
         }
         br.close();
+    }
+
+    public void writeOutFile(LinkedList[] arr, String outFile, long time) throws IOException {
+        String fname = String.format("./%s.txt", outFile);
+
+        File fout = new File(fname);
+        if (!fout.exists()) {
+            fout.createNewFile();
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fout));
+
+        for (int i = 0; i < arr.length; i++) {
+            writer.write(arr[i].printToFile());
+        }
+        writer.close();
     }
 
     public void sortByChar(CustomVector<Word> arr) {
@@ -109,4 +134,41 @@ public class AnagramMain {
 
     }
 
+    /**
+     * Two way randomized pivot quick-sort algorithm
+     * 
+     * @param arr array to be sorted
+     * @param l   left bound (0 to sort entire array at initial call)
+     * @param r   right bound(r = arr.length-1 to sort entire array at initial call)
+     */
+    public void quickSort(LinkedList[] arr, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+
+        // get random element from list to minimze potential for a unbalanced paritions
+        // and swap with element in idx = 0
+        Random rand = new Random();
+        int randIdx = l + rand.nextInt(r - l + 1);
+        swap(arr, randIdx, r);
+
+        // partitioning
+        LinkedList pivot = arr[l];
+        int pIdx = l;
+        for (int i = l + 1; i <= r; i++) {
+            if (arr[i].getHead().element.word.compareTo(pivot.getHead().element.word) <= 0) {
+                pIdx++;
+                swap(arr, i, pIdx);
+            }
+        }
+        swap(arr, l, pIdx);
+        quickSort(arr, l, pIdx - 1);
+        quickSort(arr, pIdx + 1, r);
+    }
+
+    public static void swap(LinkedList[] arr, int i, int j) {
+        LinkedList temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 }

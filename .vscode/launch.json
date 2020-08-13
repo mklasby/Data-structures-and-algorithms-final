@@ -10,8 +10,8 @@
             "request": "launch",
             "mainClass": "${file}",
             "args": [
-                "anagramTest",
-                "out"
+                "anagramTest4",
+                "outTest"
             ]
         },
         {
