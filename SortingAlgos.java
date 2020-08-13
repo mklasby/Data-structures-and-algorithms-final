@@ -277,7 +277,7 @@ public class SortingAlgos {
         }
 
         // get random element from list to minimze potential for a unbalanced paritions
-        // and swap with element in idx = 0
+        // and swap with element in idx = l
         Random rand = new Random();
         int randIdx = l + rand.nextInt(r - l + 1);
         swap(arr, randIdx, r);
