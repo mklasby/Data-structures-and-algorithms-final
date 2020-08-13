@@ -138,9 +138,11 @@ public class SortingAlgos {
         }
         BufferedWriter writer = new BufferedWriter(new FileWriter(fout));
 
-        String header = String.format("Order: %s Size:%d Algo:%s Time (ms): %d", order, size, algo, time);
-
-        writer.write(header + "\n");
+        // Header used to pull data from each test run. Unsure if this would interfere
+        // with automated testing so I have removed these lines.
+        // String header = String.format("Order: %s Size:%d Algo:%s Time (ms): %d",
+        // order, size, algo, time);
+        // writer.write(header + "\n");
 
         for (int i = 0; i < arr.length; i++) {
             writer.write(Integer.toString(arr[i]) + ", ");
