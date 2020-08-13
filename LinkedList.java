@@ -73,12 +73,19 @@ public class LinkedList {
     }
 
     /**
+     * Returns head of this list
      * 
+     * @return head node
      */
     public Node getHead() {
         return this.head;
     }
 
+    /**
+     * Deletes node at index idx
+     * 
+     * @param idx index at which to delete node
+     */
     public void delete(int idx) {
         if (idx == 0) {
             head = head.getNext();
@@ -97,6 +104,11 @@ public class LinkedList {
         }
     }
 
+    /**
+     * Removes Node from list
+     * 
+     * @param n Node to remove from list
+     */
     public void pop(Node n) {
         Node prev = null;
         Node curr = getHead();
@@ -116,6 +128,11 @@ public class LinkedList {
         }
     }
 
+    /**
+     * Counts the number of anagrams within the list by subtracting the number of
+     * anagrams from the size of the list.
+     * 
+     */
     public int countAnagrams2() {
         Node corr = getHead();
         Node corrNext = corr.getNext();
@@ -129,60 +146,25 @@ public class LinkedList {
             corrNext = corrNext.getNext();
         }
         return size;
-
     }
 
-    public int countAnagrams() {
-        Node a = getHead();
-        Node b = a.getNext();
-        int counter = 0;
-
-        while (b != null) {
-            if (a.element.sortedChars.equals(b.element.sortedChars)) {
-                System.out.print("anagram found\n");
-                System.out.print(a.element.word + "\n");
-                System.out.print(b.element.word + "\n");
-                Node c = b.next;
-                counter++; // found an anagram
-                while (c != null) {
-                    if (b.element.sortedChars.equals(c.element.sortedChars)) {
-                        System.out.print(c.element.word + "\n");
-                        c = c.next;
-                        counter++; // found another
-                    } else {
-                        break;
-                    }
-                }
-                if (c == null || a.next == null) {
-                    break;
-                }
-                a = c.next;
-                if (a == null) {
-                    break;
-                }
-                b = a.next;
-            } else {
-                a = b;
-                b = b.next;
-            }
-        }
-        return counter;
-
-    }
-
+    /**
+     * Populates an array of LinkedList objects by binning all elements which are
+     * anagrams of eachother.
+     * 
+     * @return array of LinkedLists
+     * 
+     */
     public LinkedList[] collectAnagrams() {
         System.out.print(this.length() + "\n");
-
-        // int size = this.length() - countAnagrams() - 1;
         int size = countAnagrams2();
-        System.out.printf("\nSIZE! = %d\n", size);
 
         Node curr = getHead();
         LinkedList[] lists = new LinkedList[size];
         int lists_idx = 0;
-
+        // we add each unique element to it's own linked list to start.
         while (curr != null) {
-            System.out.printf("Testing %s\n", curr.toString());
+            // System.out.printf("Testing %s\n", curr.toString());
             Node newHead = new Node(new Word(curr.element.word, curr.element.idx));
             LinkedList thisList = new LinkedList();
             thisList.setHead(newHead);
@@ -191,12 +173,15 @@ public class LinkedList {
                 lists[lists_idx] = thisList;
                 return lists;
             }
+            // if the next node is an anagram of the current node, then we append it to the
+            // same linked list
             while (currNext != null && curr.element.sortedChars.equals(currNext.element.sortedChars)) {
-                System.out.printf("Found anagram %s\n", currNext.toString());
+                // System.out.printf("Found anagram %s\n", currNext.toString());
                 Node nextNewNode = new Node(new Word(currNext.element.word, currNext.element.idx));
                 thisList.append(nextNewNode);
                 currNext = currNext.next;
             }
+            // append this list to our array of lists
             lists[lists_idx] = thisList;
             lists_idx++;
             curr = currNext;
@@ -207,6 +192,12 @@ public class LinkedList {
         return lists;
     }
 
+    /**
+     * Return length of list, sim to other java length functions, returns the count
+     * of the list, not the last element index.
+     * 
+     * @return length of list
+     */
     public int length() {
         if (this.head == null) {
             return 0;
@@ -221,64 +212,11 @@ public class LinkedList {
         }
     }
 
-    public Node insertionSortLL(String by) {
-        if (by == "word") {
-            if (head == null || head.next == null) {
-                return head;
-            }
-            Node min = new Node(new Word("", -1));
-            Node tail = min;
-            Node curr = head;
-            while (curr != null) {
-                Node ahead = curr.next;
-                if (curr.element.word.compareTo(tail.element.word) >= 0) {
-                    tail.next = curr;
-                    curr.next = null;
-                    tail = tail.next;
-                } else {
-                    Node temp = min;
-                    Node prev = min;
-                    while (temp != null && temp.element.word.compareTo(curr.element.word) <= 0) {
-                        prev = temp;
-                        temp = temp.next;
-                    }
-                    prev.next = curr;
-                    curr.next = temp;
-                }
-                curr = ahead;
-            }
-            return min.next;
-        } else { // sort by chars
-            if (head == null || head.next == null) {
-                return head;
-            }
-            Node min = new Node(new Word("", -1));
-            Node tail = min;
-            Node curr = head;
-            while (curr != null) {
-                Node ahead = curr.next;
-                if (curr.element.sortedChars.compareTo(tail.element.sortedChars) >= 0) {
-                    tail.next = curr;
-                    curr.next = null;
-                    tail = tail.next;
-                } else {
-                    Node temp = min;
-                    Node prev = min;
-                    while (temp != null && temp.element.sortedChars.compareTo(curr.element.sortedChars) <= 0) {
-                        prev = temp;
-                        temp = temp.next;
-                    }
-                    prev.next = curr;
-                    curr.next = temp;
-                }
-                curr = ahead;
-            }
-            return min.next;
-
-        }
-
-    }
-
+    /**
+     * Helper function for formating for printing to file
+     * 
+     * @return space seperated Word.word values for every node in list
+     */
     public String printToFile() {
         Node head = getHead();
         String buffer = "";
@@ -290,6 +228,9 @@ public class LinkedList {
         return buffer;
     }
 
+    /**
+     * Helper function to print to sout
+     */
     public void print() {
         Node cursor = this.getHead();
         System.out.print("[");
@@ -302,6 +243,15 @@ public class LinkedList {
 
     }
 
+    /**
+     * Improved insertion sorting algorithm. Complexity is O(n^2) due nested while
+     * loops. We must walk the list in both of the below functions from 0 to n-1
+     * 
+     * @param head head of list
+     * @param curr Node currently being sorted
+     * @param by   Parameter to switch on for sorting either by sortedChar or
+     *             Word.word
+     */
     void insertionSortHelper(Node head, Node curr, String by) {
         if (by == "word") {
             while (head != curr) {
@@ -312,7 +262,7 @@ public class LinkedList {
                 }
                 head = head.next;
             }
-        } else {
+        } else { // sort by sortedChar
             while (head != curr) {
                 if (head.element.sortedChars.compareTo(curr.element.sortedChars) > 0) {
                     Word temp = head.element;
@@ -324,6 +274,14 @@ public class LinkedList {
         }
     }
 
+    /**
+     * Entry point and outer loop for insertion sort alogrithm.
+     * 
+     * @param head Head node
+     * @param by   Parameter to swtich on for sorting either by sortedChar or
+     *             Word.word
+     * @return new head node of sorted list
+     */
     public Node insertionSortList(Node head, String by) {
         if (head == null || head.next == null)
             return head;
@@ -335,3 +293,65 @@ public class LinkedList {
         return head;
     }
 }
+
+// Due to the trailing 'tail' in this sorting function, it has a compleixity of
+// O(n^3) ! Left it in for general interest and my future reference
+
+// public Node insertionSortLL(String by) {
+// if (by == "word") {
+// if (head == null || head.next == null) {
+// return head;
+// }
+// Node min = new Node(new Word("", -1));
+// Node tail = min;
+// Node curr = head;
+// while (curr != null) {
+// Node ahead = curr.next;
+// if (curr.element.word.compareTo(tail.element.word) >= 0) {
+// tail.next = curr;
+// curr.next = null;
+// tail = tail.next;
+// } else {
+// Node temp = min;
+// Node prev = min;
+// while (temp != null && temp.element.word.compareTo(curr.element.word) <= 0) {
+// prev = temp;
+// temp = temp.next;
+// }
+// prev.next = curr;
+// curr.next = temp;
+// }
+// curr = ahead;
+// }
+// return min.next;
+// } else { // sort by chars
+// if (head == null || head.next == null) {
+// return head;
+// }
+// Node min = new Node(new Word("", -1));
+// Node tail = min;
+// Node curr = head;
+// while (curr != null) {
+// Node ahead = curr.next;
+// if (curr.element.sortedChars.compareTo(tail.element.sortedChars) >= 0) {
+// tail.next = curr;
+// curr.next = null;
+// tail = tail.next;
+// } else {
+// Node temp = min;
+// Node prev = min;
+// while (temp != null &&
+// temp.element.sortedChars.compareTo(curr.element.sortedChars) <= 0) {
+// prev = temp;
+// temp = temp.next;
+// }
+// prev.next = curr;
+// curr.next = temp;
+// }
+// curr = ahead;
+// }
+// return min.next;
+
+// }
+
+// }

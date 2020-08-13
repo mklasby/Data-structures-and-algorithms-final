@@ -1,6 +1,6 @@
 
 /**
- * Main function for running question 2
+ * Main function for running question 2. Required Node, Word, and LinkedList classes
  * 
  * @author: Mike Lasby
  * @since: August 12, 2020
@@ -12,16 +12,15 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.Comparator;
 import java.util.Random;
 import java.io.File;
-import java.util.Arrays;
 
 public class AnagramMain {
-    private Word[] inputText;
     private LinkedList[] lists;
-    private LinkedList words = new LinkedList(); // We will use this list to count our words
+
+    // We will use this list to count our words and initilize the more complex data
+    // structure
+    private LinkedList words = new LinkedList();
 
     public static void main(String[] args) {
         AnagramMain am = new AnagramMain();
@@ -48,34 +47,38 @@ public class AnagramMain {
             System.out.print(ioError);
             System.exit(0);
         }
-        long preTime = System.currentTimeMillis();
-        // am.words.setHead(n);.words.insertionSortLL("sortedChars");
+        long preTime = System.currentTimeMillis(); // algo time starts here
+
+        // sort our list of words by sortecChar to speed up subsequent functions, we
+        // rely on a sorted list for the functions which count and collect the anagrams
         am.words.setHead(am.words.insertionSortList(am.words.getHead(), "sortedChar"));
-        am.words.print();
-        am.lists = am.words.collectAnagrams();
-
+        am.lists = am.words.collectAnagrams(); // populate LinkedList[] array
         for (int i = 0; i < am.lists.length - 1; i++) {
-            am.lists[i].print();
-        }
-        for (int i = 0; i < am.lists.length - 1; i++) {
-            am.lists[i].setHead(am.lists[i].insertionSortLL("word"));
+            am.lists[i].setHead(am.lists[i].insertionSortList(am.words.getHead(), "word")); // sort each linked list
         }
 
-        am.quickSort(am.lists, 0, am.lists.length - 1);
-        long postTime = System.currentTimeMillis();
+        am.quickSort(am.lists, 0, am.lists.length - 1); // quick sort used to sort the array of linkedlist
+        long postTime = System.currentTimeMillis(); // algo time ends here
+        System.out.printf("Sorted in %d ms\n", postTime - preTime);
 
         try {
             am.writeOutFile(am.lists, outFile, postTime - preTime);
 
         } catch (IOException e) {
             System.out.print(
-                    "ERROR: Output file invalid, please ensure that the output file name is only alpha numeric characters.");
+                    "ERROR: Output file invalid, please ensure that the output file name only contains alpha numeric characters.");
             System.out.print(ioError);
             System.exit(0);
         }
 
     }
 
+    /**
+     * Reads from file
+     * 
+     * @param inFile input file name, no extension.
+     * @throws IOException
+     */
     public void readFile(String inFile) throws IOException {
         String fname = String.format("./%s.txt", inFile);
         BufferedReader br = new BufferedReader(new FileReader(fname));
@@ -86,7 +89,7 @@ public class AnagramMain {
             if (text.equals(" ") || text.equals("\n") || text.equals("\t")) {
                 continue;
             }
-            Node node = new Node(new Word(text, idx));
+            Node node = new Node(new Word(text, idx)); // create a new node which contains a word object
             words.append(node);
             idx += 1;
         }
@@ -108,36 +111,12 @@ public class AnagramMain {
         writer.close();
     }
 
-    public void sortByChar(CustomVector<Word> arr) {
-        Word temp;
-        for (int i = 1; 1 < arr.length(); i++) {
-            int j = i;
-            while (j > 0 && arr.get(j - 1).comparebyChar(arr.get(j)) > 0) {
-                temp = arr.get(j); // temp will be a Word obj
-                arr.set(j, arr.get(j - 1));
-                arr.set(j - 1, temp);
-            }
-        }
-    }
-
-    public static void insertionSort(char[] arr) {
-        char temp;
-        for (int i = 1; i < arr.length; i++) {
-            int j = i;
-            while (j > 0 && arr[j - 1] > arr[j]) {
-                temp = arr[j];
-                arr[j] = arr[j - 1];
-                arr[j - 1] = temp;
-                j--;
-            }
-        }
-
-    }
-
     /**
-     * Two way randomized pivot quick-sort algorithm
+     * Two way randomized pivot quick-sort algorithm. Algorithm will have an average
+     * runtime of O(nlogn) for a random list due to recursive calls and for loop
+     * used to pivot the partiions
      * 
-     * @param arr array to be sorted
+     * @param arr array of LinkedLists to be sorted
      * @param l   left bound (0 to sort entire array at initial call)
      * @param r   right bound(r = arr.length-1 to sort entire array at initial call)
      */

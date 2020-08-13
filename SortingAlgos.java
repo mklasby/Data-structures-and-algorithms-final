@@ -18,7 +18,7 @@ import java.util.Random;
 public class SortingAlgos {
 
     public static void main(String[] args) {
-        // expecting str[]: [order, size, algo, outFile]
+        // expecting args[]: [order, size, algo, outFile]
         String order = null;
         int size = 0;
         String algo = null;
@@ -47,7 +47,6 @@ public class SortingAlgos {
         }
 
         Random rand = new Random();
-
         int[] arr = new int[size];
         int i = 1;
 
@@ -77,7 +76,6 @@ public class SortingAlgos {
             System.out.print("ERROR: Order string not found\n");
             System.exit(0);
         }
-        // printArray(arr);
         System.out.print(Integer.toString(arr.length) + "\n");
 
         long preTime = 0;
@@ -104,7 +102,8 @@ public class SortingAlgos {
             System.exit(0);
         }
 
-        // printArray(arr);
+        // sanity check to make sure array is sorted. Tough to tell with these big
+        // negative numbers
         if (testSort(arr)) {
             System.out.printf("Sorted with %s alogrithm in %d ms\n", algo, postTime - preTime);
         }
@@ -118,6 +117,17 @@ public class SortingAlgos {
 
     }
 
+    /**
+     * Write results out to file
+     * 
+     * @param arr     array to be printed
+     * @param outFile output file name, no extension
+     * @param order   CLI parameter
+     * @param size    CLI parameter
+     * @param algo    CLI parameter
+     * @param time    time to sort
+     * @throws IOException
+     */
     public static void writeOutFile(int[] arr, String outFile, String order, int size, String algo, long time)
             throws IOException {
         String fname = String.format("./%s.csv", outFile);
@@ -138,6 +148,12 @@ public class SortingAlgos {
         writer.close();
     }
 
+    /**
+     * Confirms that array is sorted
+     * 
+     * @param arr
+     * @return true/false
+     */
     public static boolean testSort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
             if (arr[i] >= arr[i - 1]) {
@@ -150,6 +166,11 @@ public class SortingAlgos {
         return true;
     }
 
+    /**
+     * Helper print function to print our array
+     * 
+     * @param arr
+     */
     public static void printArray(int[] arr) {
         System.out.print("[");
 
@@ -159,6 +180,11 @@ public class SortingAlgos {
         System.out.print("]\n");
     }
 
+    /**
+     * Bubble sort. Time complexity will be O(n^2) due to nested for loop.
+     * 
+     * @param arr array to sort
+     */
     public static void bubbleSort(int[] arr) {
         int temp;
         for (int i = 1; i < arr.length; i++) {
@@ -173,6 +199,11 @@ public class SortingAlgos {
         }
     }
 
+    /**
+     * Insertion sort. Time complexity is O(n^2) due to nested for/while pair.
+     * 
+     * @param arr array to sort.
+     */
     public static void insertionSort(int[] arr) {
         int temp;
         for (int i = 1; i < arr.length; i++) {
@@ -187,6 +218,14 @@ public class SortingAlgos {
 
     }
 
+    /**
+     * Merge Sort. Complexity of O(nlogn) due to outer for loop and recusive
+     * traversal of binary tree
+     * 
+     * @param arr array to sort
+     * @param l   left bound, 0 to start
+     * @param r   right bound, arr.length-1 to start
+     */
     public static void mergeSort(int[] arr, int l, int r) {
         if (l < r) {
             int mid = (l + r) / 2;
@@ -222,7 +261,9 @@ public class SortingAlgos {
     }
 
     /**
-     * Two way randomized pivot quick-sort algorithm
+     * Two way randomized pivot quick-sort algorithm. Average complexity of O(nlogn)
+     * due to for loop in paritioning step and recusions down and back up binary
+     * tree.
      * 
      * @param arr array to be sorted
      * @param l   left bound (0 to sort entire array at initial call)
