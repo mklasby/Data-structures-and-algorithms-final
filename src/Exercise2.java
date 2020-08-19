@@ -49,7 +49,7 @@ public class Exercise2 {
         }
         long preTime = System.currentTimeMillis(); // algo time starts here
 
-        // sort our list of words by sortecChar to speed up subsequent functions, we
+        // sort our list of words by sortedChar to speed up subsequent functions, we
         // rely on a sorted list for the functions which count and collect the anagrams
         am.words.setHead(am.words.insertionSortList(am.words.getHead(), "sortedChar"));
         am.lists = am.words.collectAnagrams(); // populate LinkedList[] array
