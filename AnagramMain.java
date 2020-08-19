@@ -54,9 +54,8 @@ public class AnagramMain {
         am.words.setHead(am.words.insertionSortList(am.words.getHead(), "sortedChar"));
         am.lists = am.words.collectAnagrams(); // populate LinkedList[] array
         for (int i = 0; i < am.lists.length - 1; i++) {
-            am.lists[i].setHead(am.lists[i].insertionSortList(am.words.getHead(), "word")); // sort each linked list
+            am.lists[i].setHead(am.lists[i].insertionSortList(am.lists[i].getHead(), "word")); // sort each linked list
         }
-
         am.quickSort(am.lists, 0, am.lists.length - 1); // quick sort used to sort the array of linkedlist
         long postTime = System.currentTimeMillis(); // algo time ends here
         System.out.printf("Sorted in %d ms\n", postTime - preTime);
@@ -96,6 +95,23 @@ public class AnagramMain {
         br.close();
     }
 
+    /**
+     * Utility function to print lists content to standard out
+     * 
+     * @param arr array of LinkedList instances
+     */
+    public void printOutLists(LinkedList[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            LinkedList thisList = arr[i];
+            Node cursor = thisList.getHead();
+            System.out.print("\n");
+            while (cursor != null) {
+                System.out.print(cursor.element.word + " ");
+                cursor = cursor.getNext();
+            }
+        }
+    }
+
     public void writeOutFile(LinkedList[] arr, String outFile, long time) throws IOException {
         String fname = String.format("./%s.txt", outFile);
 
@@ -106,6 +122,7 @@ public class AnagramMain {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fout));
 
         for (int i = 0; i < arr.length; i++) {
+            // arr[i].print();
             writer.write(arr[i].printToFile());
         }
         writer.close();

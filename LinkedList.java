@@ -156,8 +156,11 @@ public class LinkedList {
      * 
      */
     public LinkedList[] collectAnagrams() {
-        System.out.print(this.length() + "\n");
+        // System.out.print("Number of words: ");
+        // System.out.print(this.length() + "\n");
         int size = countAnagrams2();
+        // System.out.print("Number of anagram groups: ");
+        // System.out.print(size + "\n");
 
         Node curr = getHead();
         LinkedList[] lists = new LinkedList[size];
@@ -189,6 +192,7 @@ public class LinkedList {
                 break;
             }
         }
+
         return lists;
     }
 
@@ -224,6 +228,8 @@ public class LinkedList {
             buffer += head.element.word + " ";
             head = head.next;
         }
+        // System.out.print(buffer);
+
         buffer += "\n";
         return buffer;
     }
@@ -293,65 +299,3 @@ public class LinkedList {
         return head;
     }
 }
-
-// Due to the trailing 'tail' in this sorting function, it has a compleixity of
-// O(n^3) ! Left it in for general interest and my future reference
-
-// public Node insertionSortLL(String by) {
-// if (by == "word") {
-// if (head == null || head.next == null) {
-// return head;
-// }
-// Node min = new Node(new Word("", -1));
-// Node tail = min;
-// Node curr = head;
-// while (curr != null) {
-// Node ahead = curr.next;
-// if (curr.element.word.compareTo(tail.element.word) >= 0) {
-// tail.next = curr;
-// curr.next = null;
-// tail = tail.next;
-// } else {
-// Node temp = min;
-// Node prev = min;
-// while (temp != null && temp.element.word.compareTo(curr.element.word) <= 0) {
-// prev = temp;
-// temp = temp.next;
-// }
-// prev.next = curr;
-// curr.next = temp;
-// }
-// curr = ahead;
-// }
-// return min.next;
-// } else { // sort by chars
-// if (head == null || head.next == null) {
-// return head;
-// }
-// Node min = new Node(new Word("", -1));
-// Node tail = min;
-// Node curr = head;
-// while (curr != null) {
-// Node ahead = curr.next;
-// if (curr.element.sortedChars.compareTo(tail.element.sortedChars) >= 0) {
-// tail.next = curr;
-// curr.next = null;
-// tail = tail.next;
-// } else {
-// Node temp = min;
-// Node prev = min;
-// while (temp != null &&
-// temp.element.sortedChars.compareTo(curr.element.sortedChars) <= 0) {
-// prev = temp;
-// temp = temp.next;
-// }
-// prev.next = curr;
-// curr.next = temp;
-// }
-// curr = ahead;
-// }
-// return min.next;
-
-// }
-
-// }
