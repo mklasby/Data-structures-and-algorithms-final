@@ -26,8 +26,8 @@ public class Exercise2 {
         Exercise2 am = new Exercise2();
 
         String ioError = "Please enter input in the form of < java Exercise2 inputFileName outputFileName>\n"
-                + "Where:\n" + "inputFileName: String name of text file to read from (.txt)\n"
-                + "outputFileName: String name of text file to write output to (.txt)\n"
+                + "Where:\n" + "inputFileName: String name of text file to read from, excluding file format\n"
+                + "outputFileName: String name of text file to write output to, excluding file format\n"
                 + "Please try again! Goodbye\n";
 
         String inFile = null;
@@ -58,7 +58,7 @@ public class Exercise2 {
         }
         am.quickSort(am.lists, 0, am.lists.length - 1); // quick sort used to sort the array of linkedlist
         long postTime = System.currentTimeMillis(); // algo time ends here
-        System.out.printf("Sorted in %d ms\n", postTime - preTime);
+        System.out.printf("File processed in %d ms\n", postTime - preTime);
 
         try {
             am.writeOutFile(am.lists, outFile, postTime - preTime);
@@ -79,7 +79,13 @@ public class Exercise2 {
      * @throws IOException
      */
     public void readFile(String inFile) throws IOException {
-        String fname = String.format("./%s.txt", inFile);
+        String fname;
+        if (inFile.endsWith(".txt")) {
+            fname = String.format("./%s", inFile);
+        } else {
+            fname = String.format("./%s.txt", inFile);
+        }
+
         BufferedReader br = new BufferedReader(new FileReader(fname));
 
         String text;

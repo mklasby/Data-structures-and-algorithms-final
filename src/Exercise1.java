@@ -30,6 +30,7 @@ public class Exercise1 {
                 + "outputfile: str -> user specified file name\n" + "Try again, GOODBYE!\n\n";
         try {
             order = args[0];
+            order = order.toLowerCase();
             size = Integer.parseInt(args[1]);
             if (size < 0) {
                 System.out.print("ERROR: Size must be positive\n");
@@ -38,8 +39,9 @@ public class Exercise1 {
 
             }
             algo = args[2];
+            algo = algo.toLowerCase();
             outFile = args[3];
-            System.out.printf(order + Integer.toString(size) + algo + outFile + "\n");
+            // System.out.printf(order + Integer.toString(size) + algo + outFile + "\n");
 
         } catch (Exception e) {
             System.out.print(errorString);
@@ -76,7 +78,6 @@ public class Exercise1 {
             System.out.print("ERROR: Order string not found\n");
             System.exit(0);
         }
-        System.out.print(Integer.toString(arr.length) + "\n");
 
         long preTime = 0;
         long postTime = 0;
